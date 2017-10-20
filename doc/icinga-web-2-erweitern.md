@@ -227,7 +227,7 @@ Here, Hello corresponds to the desired command with a large initial letter. The 
 
 Example Command:
 
-`` `Php
+```Php
 <? Php
 
 namespace Icinga \ Module \ Training \ Clicommands;
@@ -237,16 +237,16 @@ use Icinga \ Cli \ Command;
 class HelloCommand extends Command
 {
 }
-`` `
+``` 
 
 ## Namespaces
 
 * Namespaces help to delineate modules neatly against each other
 * Each module receives a namespace, which is derived from the module name:
 
-`` `
+```
 Icinga \ modules \ <module name>
-`` `
+```
 
 * The initial letter MUST be capitalized
 * For CLI commands, a dedicated clicommand namespace is available
@@ -259,7 +259,7 @@ All CLI Commands MUST inherit the Command class in the namespace `Icinga \ Cli`.
 
 Each command can have multiple actions. Any new public method that ends with action is automatically converted to a CLI command action:
 
-`` `Php
+```Php
 <? Php
 class HelloCommand extends Command
 {
@@ -268,7 +268,7 @@ class HelloCommand extends Command
         echo "Hello World! \ n";
     }
 }
-`` `
+```
 
 ## Task 1
 
@@ -294,7 +294,7 @@ If the input is ambiguous as with `icingacli mo`, then a corresponding help is d
 
 Commands and their actions can be easily documented via inline comments. The comment text is immediately available on the CLI as a help.
 
-`` `Php
+```Php
 <? Php
 
 / **
@@ -314,7 +314,7 @@ class HelloCommand extends Command
     public function worldAction ()
     {
         // ...
-`` `
+```
 
 A few sample combinations of how the help can be displayed:
 
@@ -334,7 +334,7 @@ Create and test documentation for a `something` action for the` say` command in 
 
 Of course we can control, use and control command line parameters. Thanks to inheritance, the corresponding instance of `Icinga \ Cli \ Params` is already available in` $ this-> params`. The object has a `get ()` method, which we can specify the desired parameter and optionally a default value. Without default value, we get `null` if the corresponding parameter is not given.
 
-`` `Php
+```Php
 <? Php
 
 // ...
@@ -349,7 +349,7 @@ Of course we can control, use and control command line parameters. Thanks to inh
         $ from = $ this-> params-> get ('from', 'Nowhere');
         echo "Hello from $ from! \ n";
     }
-`` `
+```
 
 ### Example call:
 
@@ -362,7 +362,7 @@ Of course we can control, use and control command line parameters. Thanks to inh
 
 It is not absolutely necessary to assign an identifier to each parameter. If you want, you can also simply group parameters together. These are most conveniently accessible through the `shift ()` method:
 
-`` `Php
+```Php
 <? Php
 
 // ...
@@ -377,7 +377,7 @@ public function fromAction ()
     $ from = $ this-> params-> shift ();
     echo "Hello from $ from! \ n";
 }
-`` `
+```
 
 ### Example call
 
@@ -385,19 +385,19 @@ public function fromAction ()
 
 ## Shiften makes joy
 
-The `shift ()` method behaves in the same way as usual programming languages ​​are used. The first parameter in the list is returned and removed from the list. If `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` ` With `unshift ()` you can undo an action at any time.
+The `shift ()` method behaves in the same way as usual programming languages ​​are used. The first parameter in the list is returned and removed from the list. If ```` ```` ```` ```` ```` ```` ```` ```` ```` ```` ```` ```` ```` ```` ``` With `unshift ()` you can undo an action at any time.
 
 A special case is `shift ()` with an identifier (key) as a parameter. Thus `shift ('to')` would not only return the value of the `--to` parameter, but also remove it from the Params object regardless of its position. Again, it is possible to include a default value:
 
-`` `Php
+```Php
 <? Php
 // ...
 $ person = $ this-> params-> shift ('from', 'Nobody');
-`` `
+```
 
 Of course, this is also possible for standalone parameters. Since we have already occupied the first parameter of `shift ()` with the optional identifier (key), but we want to set something for the second (default value), we simply set the identifier to zero:
 
-`` `Php
+```Php
 <? Php
 // ...
 public function fromAction ()
@@ -405,7 +405,7 @@ public function fromAction ()
     $ from = $ this-> params-> shift (null, 'Nowhere');
     echo "Hello from $ from! \ n";
 }
-`` `
+```
 
 ### Example call
 
@@ -430,7 +430,7 @@ Extend the say command to support all the following varieties:
 
 Icinga Web 2 wants to promote clean PHP code. This includes, among other things, that all warnings generate errors. Errors are thrown for error handling. We can try it out:
 
-`` `Php
+```Php
 <? Php
 // ...
 use Icinga \ Exception \ ProgrammingError;
@@ -442,7 +442,7 @@ public function kaputtAction ()
 {
     throw new ProgrammingError ('No way');
 }
-`` `
+```
 
 ### Calling
 
@@ -457,27 +457,27 @@ As we can see, the CLI catches all exceptions and gives pleasantly readable erro
 
 Thus, failed jobs can be reliably evaluated. Only the exit code 0 stands for successful execution. Of course everyone is free to use additional exit codes. This is done in PHP using `exit ($ code)`. Example:
 
-`` `Php
+```Php
 <? Php
 echo "CRITICAL \ n";
 exit (2);
-`` `
+```
 
 Alternatively, Icinga Web provides the `fail ()` function in the Command class. It is an abbreviation for a colored "ERROR", a status output and `exit (1)`:
 
-`` `Php
+```Php
 <? Php
 $ this-> fail ('An error has occurred');
-`` `
+```
 
 ## To dye?
 
 As we've just seen, the Icinga CLI can produce colored output. Using the screen class in the `Icinga \ Cli` namespace, useful help functions are available. We are accessing it in our command classes via `$ this-> screen`. Thus, the output can be colored:
 
-`` `Php
+```Php
 <? Php
 echo $ this-> screen-> colorize ("Hello from $ from! \ n", "lightblue");
-`` `
+```
 
 As an optional third parameter, the `colorize ()` function can be used to specify a background color. ANSI escape codes are used to display the colors. If Icinga CLI detects that output is NOT done in a terminal / TTY, no colors are output. This ensures that e.g. when redirecting the output to a file, no spurious special characters appear.
 
@@ -517,7 +517,7 @@ If we want to create our "Hello World" again for our training module, we will fi
 
 We then connect our controller. As you already guess, this HelloController.php must be named in the controller namespace of our module:
 
-`` `Php
+```Php
 <? Php
 
 namespace Icinga \ Module \ Training \ Controllers;
@@ -530,7 +530,7 @@ class HelloController extends Controller
     {
     }
 }
-`` `
+```
 
 If we call the Url (training / application / controllers) now, we get an error message:
 
@@ -548,13 +548,13 @@ The corresponding base directory is still missing. Since we create a view script
     
 The view script is then simply like the "action", so world.phtml:
 
-`` `Php
+```Php
 <h1> Hello World! </ h1>
-`` `
+```
 
 That's it, our new URL is now available. We could now use the full range for our module and style it accordingly. We can also use a few predefined elements. Two important classes are e.g. `controls` and` content` for header elements and page content.
 
-`` `Php
+```Php
 <div class = "controls">
 <h1> Hello World! </ h1>
 </ Div>
@@ -562,7 +562,7 @@ That's it, our new URL is now available. We could now use the full range for our
 <div class = "content">
 Here you go ...
 </ Div>
-`` `
+```
 
 This automatically creates even distances to the page margins and also has the effect of scrolling down the `controls` while the content is scrolling. Of course, we will notice this only when we fill our module with more content.
 
@@ -570,36 +570,36 @@ This automatically creates even distances to the page margins and also has the e
 
 Menu items in Icinga Web 2 can be personalized and / or specified by the administrator (*). However, they can be provided by modules. This is a global configuration, which can be made in the base directory of the own module in `configuration.php`:
 
-`` `Php
+```Php
 <? Php
 
 $ This-> menuSection ( 'training')
      -> add ('Hello World')
      -> setUrl ( 'training / hello / world');
-`` `
+```
 
 ### Icons for menu items
 
 In order for our menu point to look better, we miss the same icon:
 
-`` `Php
+```Php
 <? Php
 
 $ This-> menuSection ( 'training')
      -> setIcon ( 'thumbs-up')
      -> add ('Hello World')
      -> setUrl ( 'training / hello / world');
-`` `
+```
 
 To find out which icons are available, we enable the `doc` module under` System` / `Module`. Then we find the icon list under `Dokumentation` /` Developer - Style`. These are icons that are embedded in a font. This has the great advantage that very few requests have to be directed - the icons are simply "always there".
 
 Alternatively, you can still use classic icons (.png etc) on request. This is especially useful when you want to use a special icon (for example, a company logo) for your module, which can be badly integrated into the official Icinga Icon font:
 
-`` `Php
+```Php
 <? Php
 
 $ This-> menuSection ( 'training') -> setIcon ( 'img / icons / success.png');
-`` `
+```
 
 ## Add pictures
 
@@ -615,12 +615,12 @@ Our images are immediately accessible via web, the URL pattern is as follows:
 
 For our concrete case, therefore, http: //localhost/img/training/tgelf.jpg. This can also be used wonderfully in our view script. Instead of creating an img tag (which of course would be possible) we use one of the many practical View-Helper:
 
-`` `Php
+```Php
 ...
 <div class = "content">
 <? = $ this-> img ('img / training / tgelf.jpg'), array ('title' => 'Thomas Gelf'))> Here you go ...
 </ Div>
-`` `
+```
 
 ## Task
 
@@ -630,14 +630,14 @@ Create the URLs `training / hello / thomas` and` training / say / hello` and add
 
 Before we deal with serious issues we want to provide our useful URL as a default dashboard. This can also be done in the `configuration.php`:
 
-`` `Php
+```Php
 <? Php
 $ this-> dashboard ('training') -> add ('hello', 'training / hello / world');
-`` `
+```
 
 # We need data!
 
-After our web-routes now work so wonderfully, we want to do something sensible. An application can still be so beautiful, without any useful content, it will quickly get boring. In an MVC environment, the `Controllers` usually use` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` `` ``````````` '
+After our web-routes now work so wonderfully, we want to do something sensible. An application can still be so beautiful, without any useful content, it will quickly get boring. In an MVC environment, the `Controllers` usually use '
 
 ## Fill out our view with data
 
