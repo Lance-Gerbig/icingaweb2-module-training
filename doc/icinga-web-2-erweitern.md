@@ -136,18 +136,18 @@ Finished. To use the installation wizard, a token is required for security reaso
 
 We have been running fun Icinga Web 2 without an external web server. Even for most productive environments, this would be performant enough, but most of us feel more comfortable with a "real" web server. We stop so if not already done the PHP process and clear up:
 
-`` `Sh
+```Sh
 rm -rf / tmp / FileCache_icingaweb / / var / lib / php5 / sess_ *
-`` `
+```
 
 These files, which are probably created by root, would otherwise only give us problems. Then we install our webserver:
 
-`` `
+```
 apt-get install libapache2-mod-php5
 ./icingaweb2/bin/icingacli setup config webserver apache \
   > /etc/apache2/conf.d/icingaweb2.conf
 service apache2 restart
-`` `
+```
 
 You can see, Icinga Web 2 can generate its own configuration for Apache (2.x, also compatible to 2.4) itself. This applies not only to Apache, but also to Nginx.
 
@@ -643,7 +643,7 @@ After our web-routes now work so wonderfully, we want to do something sensible. 
 
 The controller provides access to our view in `$ this-> view`. In this way, it can be easily refueled:
 
-`` `Php
+```Php
 <? Php
 
 public function worldAction ()
@@ -654,11 +654,11 @@ public function worldAction ()
         'Result' => 'fantastic'
     );
 }
-`` `
+```
 
 We are now expanding our View script and presenting the data transferred accordingly:
 
-`` `Php
+```Php
 <h3> Some data ... </ h3>
 
 This example is provided by <a href="http://www.netways.de"> Netways </a>
@@ -669,7 +669,7 @@ and based on <? = $ this-> application?>.
     <tr> <th> <? = $ key?> </ td> <? = $ val?> </ td> </ tr>
 <? php endforeach?>
 </ Table>
-`` `
+```
 
 ## Task
 
@@ -730,7 +730,7 @@ For our module we use the name space `Icinga \ Module \ <modulename>` as already
 
 A Biblithek, which does the task implemented in the exercise, could lie in `File.php` and look as follows:
 
-`` `Php
+```Php
 <? Php
 
 namespace Icinga \ Module \ Training;
@@ -756,11 +756,11 @@ class directory
         return $ result;
     }
 }
-`` `
+```
 
 Our controller can now easily retrieve the data from our small library:
 
-`` `Php
+```Php
 <? Php
 
 // ...
@@ -773,7 +773,7 @@ class FileController extends Controller
         $ this-> view-> files = directory :: listFiles ($ this-> Module () -> getBaseDir ());
     }
 }
-`` `
+```
 
 ## Task
 
@@ -783,10 +783,10 @@ Put this or a similar library into your module. Provide a view script, which can
 
 So far we have not given any parameters to our URLs. This is also quite simple. As in the command line, we have a simple access to params in Icinga Web. The access is as usual:
 
-`` `Php
+```Php
 <? Php
 $ file = $ this-> params-> get ('file');
-`` `
+```
 
 Also `shift ()` and consorts are of course available again.
 ## Task
@@ -797,13 +797,13 @@ In `training / file / show? File = <filename>`, additional information about the
 
 In our file list we now want to link from each file to the corresponding detail area. To avoid problems with the escaping of parameters, we use a new helper, `qlink`:
 
-`` `Php
+```Php
 <td> <? = $ this-> qlink (
     $ File-> name,
     'Training / file / show'
     array ('file' => $ file-> name)
 )?> </ td>
-`` `
+```
 
 The first parameter is the text to be displayed, the second is the link to be created, and the third is the optional parameter for this link. As a fourth parameter, you could also specify an array with any additional HTML attributes.
 
@@ -825,7 +825,7 @@ Usually, links always end up in the same container, but you can influence the be
 
 Icinga Web still offers some nice tools. One thing we want to look at is the so-called DataSources. We include the ArrayDatasource and extend our library code by another function:
 
-`` `Php
+```Php
 <? Php
 
 use Icinga \ Data \ DataArray \ ArrayDatasource;
@@ -837,40 +837,40 @@ use Icinga \ Data \ DataArray \ ArrayDatasource;
         $ ds = new ArrayDatasource (self :: listFiles ($ path));
         return $ ds-> select ();
     }
-`` `
+```
 
 Then we change our controller very easily:
 
 
-`` `Php
+```Php
 <? Php
 $ query = directory :: selectFiles (
     $ This-> Modules () -> getBaseDir ()
 ) -> order ( 'type') -> order ( 'name');
 
 $ this-> view-> files = $ query-> fetchAll ();
-`` `
+```
 
 ## Task 1
 Modify the list so that you can sort it in ascending or descending order.
 ## Additional task
 
-`` `Php
+```Php
 <? Php
 
 $ editor = widget :: create ('filterEditor') -> handleRequest ($ this-> getRequest ());
 $ Query-> applyFilter ($ editor-> getFilter ());
-`` `
+```
 
 ## Autorefresh
 
 As a monitoring interface it is self-evident that Icinga Web provides a reliable and stable Autorefresh function. This can be conveniently controlled from the controllers:
 
-`` `Php
+```Php
 <? Php
 
 $ This-> setAutorefreshInterval (10);
-`` `
+```
 
 ## Exercise 2
 
@@ -880,7 +880,7 @@ Our file list should be updated automatically, the detail info as well. Show the
 
 If you want to develop a module this probably synonymous configure. Configuration for a module can be found under `/ etc / icingaweb / modules / <modulename>`. What is found there in a `config.ini` is accessible in the controller as follows:
 
-`` `Php
+```Php
 <? Php
 $ config = $ this-> Config ();
 
@@ -895,7 +895,7 @@ echo $ config-> get ('section', 'no entry', 'default value');
 
 // Reads from the special.ini instead of the config.ini:
 $ config = $ this-> Config ('special');
-`` `
+```
 
 ## Task
 The base path for the list controller of our training module should be configurable. If no path is configured, we continue to use our module directory.
@@ -903,9 +903,9 @@ The base path for the list controller of our training module should be configura
 # Translations
 For a detailed description of the translation possibilities, we open the documentation for the `translation` module. Here are the steps:
 
-`` `Php
+```Php
 <h1> <? = $ this-> translate ('My files')?> </ h1>
-`` `
+```
 
     apt-get install gettext poedit
     icingacli module enable translation
@@ -919,12 +919,12 @@ With Icinga Web 2, we want to make the integration of third-party software as si
 
 This is basically the following call in any PHP file:
 
-`` `Php
+```Php
 <? Php
 
 require_once 'Icinga / Application / EmbeddedWeb.php';
 Icinga \ Application \ EmbeddedWeb :: start ();
-`` `
+```
 
 Finished! No authentication, no bootstrapping of the full web interface. But all the library code that is available can be used.
 
